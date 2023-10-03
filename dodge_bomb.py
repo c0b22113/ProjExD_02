@@ -1,4 +1,5 @@
 import random
+import time
 import sys
 import pygame as pg
 
@@ -127,6 +128,9 @@ def main():
     kk_rct = kk_img.get_rect()
     kk_rct.center = (900, 400)
 
+    kk_img_hit = pg.image.load("ex02/fig/8.png") # 爆弾接触時の画像
+    kk_img_hit = pg.transform.rotozoom(kk_img_hit, 0, 2.0)
+
     bd_img, bd_rct = create_bomb()
     vx, vy = +5, +5
 
@@ -145,6 +149,9 @@ def main():
                 return
 
         if kk_rct.colliderect(bd_rct):
+            draw_images(screen, bg_img, kk_img_hit, kk_rct, bd_img, bd_rct, 0, False) # 爆弾接触時の画像を描画(角度、反転なし)
+            pg.display.update()
+            time.sleep(2) # 2秒間待ってから終了
             print("GAME OVER")
             return
 
