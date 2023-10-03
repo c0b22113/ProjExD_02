@@ -1,5 +1,6 @@
 import random
 import time
+import math
 import sys
 import pygame as pg
 
@@ -52,7 +53,7 @@ def create_bomb():
     return bd_img, bd_rct
 
 
-def get_rotation_angle_and_flip(mv):
+def get_rotation_angle_and_flip(mv: tuple) -> tuple:
     """
     引数: 移動量 (mv)
     戻り値: 回転角度, 反転フラグ
@@ -120,6 +121,28 @@ def draw_images(screen, bg_img, kk_img, kk_rct, bd_img, bd_rct, rotation_angle, 
     screen.blit(bd_img, bd_rct)
 
 
+def increase_speed(vx, vy, speed_multiplier):
+    """
+    速度を増加させつつ、方向を保持
+
+    引数:
+    vx, vy: 現在のx方向およびy方向の速度
+    speed_multiplier: 速度を増加させる係数
+
+    戻り値:
+    vx, vy: x方向およびy方向の増加した速度
+    """
+    # 現在の速度の大きさを計算します。
+    speed = math.sqrt(vx**2 + vy**2)
+
+    # 現在の速度がゼロでない場合、正規化された方向を計算し、速度を更新します。
+    if speed != 0:
+        dir_x, dir_y = vx/speed, vy/speed
+        vx = dir_x * speed * speed_multiplier
+        vy = dir_y * speed * speed_multiplier
+
+    return vx, vy
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -157,11 +180,11 @@ def main():
             print("GAME OVER")
             return
 
-        if tmr > 0 and tmr % 600 == 0:  # 例えば、600フレームごとに速度をアップ
-            speed_multiplier = 1 + (tmr // 500) * 0.5  # 500フレームごとに速度を50%ずつ増やす
-            speed_multiplier = min(speed_multiplier, 10)  # 速度は最大で初期速度の10倍
-            vx = initial_vx * speed_multiplier  # 横速度を更新
-            vy = initial_vy * speed_multiplier  # 縦速度を更新
+        if tmr > 0 and tmr % 600 == 0:
+            speed_multiplier = 1 + (tmr // 500) * 0.5 # 500フレームごとに速度を50%ずつ増やす
+            speed_multiplier = min(speed_multiplier, 10) # 速度は最大で初期速度の10倍
+            vx, vy = increase_speed(vx, vy, speed_multiplier) # 速度を増加
+
 
         sum_mv, rotation_angle, flip = move_character(kk_rct, delta) # こうかとんの移動量、回転角度、反転フラグを取得
         vx, vy = move_bomb(bd_rct, vx, vy) # 爆弾の移動量を取得
