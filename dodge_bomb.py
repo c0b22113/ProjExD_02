@@ -14,6 +14,27 @@ delta = { # 練習3：キー入力に対する移動量
 }
 
 
+#  こうかとんと爆弾が画面の外に出ないようにせよ．
+# • 画面内or画面外の判定をする関数を実装する
+# • 引数：こうかとんRect or 爆弾Rect
+# • 戻り値：横方向・縦方向の真理値タプル（True：画面内／False：画面外）
+# • Rectオブジェクトのleft, right, top, bottomの値から画面内・外を判断する
+# • 更新後の座標が画面外になった場合の挙動
+# • こうかとん：更新前の位置に戻す／爆弾：速度の符号を反転する
+def check_bound(obj_rct: pg.Rect):
+    """
+    引数:こうかとんRect or 爆弾Rect
+    戻り値:横方向・縦方向の真理値タプル（True:画面内/False:画面外）
+    """
+    status = [True, True]
+    if obj_rct.left < 0 or WIDTH < obj_rct.right:
+        status[0] = False
+        return status
+    if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
+        status[1] = False
+        return status
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
