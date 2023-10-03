@@ -18,6 +18,7 @@ def main():
     bomb_rct = bomb.get_rect()
     x, y = random.randint(0, WIDTH), random.randint(0, HEIGHT) # 画面サイズにランダムに配置
     bomb_rct.center = (x, y) # 画面中央に配置
+    vx, vy = 5, 5 # 速度
 
     clock = pg.time.Clock()
 
@@ -30,9 +31,11 @@ def main():
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
         screen.blit(bomb, bomb_rct)
+        bomb_rct.move_ip(vx, vy) # bombの移動
+
         pg.display.update()
         tmr += 1
-        clock.tick(10)
+        clock.tick(50)
 
 
 if __name__ == "__main__":
