@@ -133,6 +133,12 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
 
+    initial_vx, initial_vy = +5, +5  # 初期速度を変数として定義
+    vx, vy = initial_vx, initial_vy  # 初期速度を設定
+
+    clock = pg.time.Clock()
+    tmr = 0  # 時間経過をカウントする変数
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -141,6 +147,12 @@ def main():
         if kk_rct.colliderect(bd_rct):
             print("GAME OVER")
             return
+
+        if tmr > 0 and tmr % 600 == 0:  # 例えば、600フレームごとに速度をアップ
+            speed_multiplier = 1 + (tmr // 500) * 0.5  # 500フレームごとに速度を50%ずつ増やす
+            speed_multiplier = min(speed_multiplier, 10)  # 速度は最大で初期速度の10倍
+            vx = initial_vx * speed_multiplier  # 横速度を更新
+            vy = initial_vy * speed_multiplier  # 縦速度を更新
 
         sum_mv, rotation_angle, flip = move_character(kk_rct, delta)
         vx, vy = move_bomb(bd_rct, vx, vy)
