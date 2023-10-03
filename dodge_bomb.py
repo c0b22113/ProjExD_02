@@ -3,7 +3,9 @@ import time
 import sys
 import pygame as pg
 
+
 WIDTH, HEIGHT = 1600, 900
+
 
 delta = {
     pg.K_UP: (0, -5),
@@ -80,7 +82,7 @@ def move_character(kk_rct, delta):
             sum_mv[0] += mv[0]
             sum_mv[1] += mv[1]
 
-    rotation_angle, flip = get_rotation_angle_and_flip(tuple(sum_mv))
+    rotation_angle, flip = get_rotation_angle_and_flip(tuple(sum_mv)) # 回転角度と反転フラグを取得
 
     kk_rct.move_ip(sum_mv[0], sum_mv[1])
     if check_bound(kk_rct) != (True, True):
@@ -161,9 +163,9 @@ def main():
             vx = initial_vx * speed_multiplier  # 横速度を更新
             vy = initial_vy * speed_multiplier  # 縦速度を更新
 
-        sum_mv, rotation_angle, flip = move_character(kk_rct, delta)
-        vx, vy = move_bomb(bd_rct, vx, vy)
-        draw_images(screen, bg_img, kk_img, kk_rct, bd_img, bd_rct, rotation_angle, flip)
+        sum_mv, rotation_angle, flip = move_character(kk_rct, delta) # こうかとんの移動量、回転角度、反転フラグを取得
+        vx, vy = move_bomb(bd_rct, vx, vy) # 爆弾の移動量を取得
+        draw_images(screen, bg_img, kk_img, kk_rct, bd_img, bd_rct, rotation_angle, flip) # 画像を描画
 
         pg.display.update()
         tmr += 1
